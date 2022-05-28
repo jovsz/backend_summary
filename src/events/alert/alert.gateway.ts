@@ -32,6 +32,14 @@ import {
       console.log('ALguien se fue! chao chao')
     }
   
-  
+
+    async sendAlert(
+        data:any,
+    ){
+        console.log(data)
+        this.server.emit('newAlert',data)
+        return 'Alerta Enviada'
+    }
+    
    
   }
