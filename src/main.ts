@@ -23,7 +23,7 @@ async function bootstrap() {
       }
       return callback(null, true);
     },
-    
+    credentials:true,
   }))
 
   app.setGlobalPrefix('api/v1');
