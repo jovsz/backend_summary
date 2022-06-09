@@ -9,10 +9,11 @@ import {
   import { Server, Socket } from 'socket.io';
   
   @WebSocketGateway(8002, {
-    cors: { origin: '*' },
+    cors: { origin: 'http://localhost:3000' },
     methods: ["GET","POST"],
     transport: ['websocket','polling'],
     path: '/websocket',
+    allowEIO3: true,
     credentials: true,
   })
   export class AlertGateway
