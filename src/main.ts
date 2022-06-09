@@ -10,7 +10,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors();
 
-  const allowedDomains = ['http://localhost:3000','http://127.0.0.1:3000', 'https://v2fineinteriors.quickbase.com/', 'https://api.quickbase.com'];
+  const allowedDomains = ['http://localhost:3000','http://127.0.0.1:3000', 'https://v2fineinteriors.quickbase.com/', 'https://api.quickbase.com', 'https://new.v2fineinteriors.app'];
   
   app.use(cors({
     origin:function (origin, callback) {
@@ -49,7 +49,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
 
   SwaggerModule.setup('api', app, document);
-    await app.listen(8000);
+    await app.listen(8001);
     Logger.log(`Server is running in ${await app.getUrl()}`)
 }
 bootstrap();

@@ -8,8 +8,8 @@ import {
   } from '@nestjs/websockets';
   import { Server, Socket } from 'socket.io';
   
-  @WebSocketGateway(8001, {
-    cors: { origin: 'http://localhost:3000' },
+  @WebSocketGateway(8002, {
+    cors: { origin: '*' },
     methods: ["GET","POST"],
     transport: ['websocket','polling'],
     path: '/alertSocket',
