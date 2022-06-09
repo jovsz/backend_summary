@@ -13,7 +13,7 @@ export class AlertController {
     async alertGenerate(
         @Body() data: any,
     ){
-        // console.log(data)
+        await this.alertService.save();
         return await this.alertgateway.sendAlert(data)
     }
 
