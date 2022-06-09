@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { AlertGateway } from './events/alert/alert.gateway';
 import { AlertModule } from './events/alert/alert.module';
+import { UserModule } from './newSummary/user/user.module';
 
 @Module({
   imports: [
@@ -24,9 +25,10 @@ import { AlertModule } from './events/alert/alert.module';
       synchronize: true,
     }),
     EventEmitterModule.forRoot(),
-    AlertModule
+    AlertModule,
+    UserModule,
   ],
   controllers: [AppController],
-  providers: [AppService, AlertGateway],
+  providers: [AppService],
 })
 export class AppModule {}

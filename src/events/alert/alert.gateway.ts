@@ -1,13 +1,12 @@
-import {
-    OnGatewayConnection,
-    OnGatewayDisconnect,
-    OnGatewayInit,
-    SubscribeMessage,
-    WebSocketGateway,
-    WebSocketServer,
-  } from '@nestjs/websockets';
-  import { Server, Socket } from 'socket.io';
-  
+import { Logger } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { ConnectedSocket, MessageBody, OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit, SubscribeMessage, WebSocketGateway, WebSocketServer, } from '@nestjs/websockets';
+import { Server, Socket } from 'socket.io';
+import { User } from 'src/index.entities';
+import { UserService } from 'src/newSummary/user/user.service';
+import { getRepository, Repository } from 'typeorm';
+
+
   @WebSocketGateway(8002, {
     cors: { origin: ['https://new.v2fineinteriors.app', 'http://localhost:3000'] },
     methods: ["GET","POST"],
@@ -16,28 +15,48 @@ import {
     allowEIO3: true,
     credentials: true,
   })
-  export class AlertGateway
-    implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
+  export class AlertGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
   {
     @WebSocketServer() server: Server;
-  
+     
+    private logger = new Logger('MessageGateway')
+
+    constructor(
+      private readonly userService: UserService,
+      
+    ) {
+
+    }
+    
     afterInit(server: any) {
-      console.log('Esto se ejecuta cuando inicia')
+      this.logger.log('Inicializo')
     }
   
     handleConnection(client: any, ...args: any[]) {
-      console.log('Hola alguien se conecto al socket');
+      
     }
   
-    handleDisconnect(client: any) {
-      console.log('ALguien se fue! chao chao')
+    async handleDisconnect(client: any) {
+      this.logger.log('Se marcho')
+      await this.userService.onDisconnect(client.id)
     }
   
+    @SubscribeMessage('checkUser')
+    async check(
+      @ConnectedSocket() client: Socket,
+      @MessageBody() data: any
+    ){
+      if(data){
+        await this.userService.checkUser(data, client.id)
+        
+      }
+    }
+   
 
     async sendAlert(
         data:any,
     ){
-        console.log(data)
+      
         this.server.emit('newAlert',data)
         return 'Alerta Enviada'
     }

@@ -1,0 +1,1 @@
+export * from './newSummary/user/entities/user-entity'

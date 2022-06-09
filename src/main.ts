@@ -38,7 +38,7 @@ async function bootstrap() {
   app.use(urlencoded({ extended: true, limit: '50mb' }));
 
   const config = new DocumentBuilder()
-  .setTitle('Cats example')
+  .setTitle('New Summary')
   .setDescription('The cats API description')
   .setVersion('1.0')
   .addTag('cats')
