@@ -9,7 +9,7 @@ import {
   import { Server, Socket } from 'socket.io';
   
   @WebSocketGateway(8002, {
-    cors: { origin: 'http://localhost:3000' },
+    cors: { origin: ['https://new.v2fineinteriors.app', 'http://localhost:3000'] },
     methods: ["GET","POST"],
     transport: ['websocket','polling'],
     path: '/websocket',
