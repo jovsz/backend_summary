@@ -12,7 +12,7 @@ import {
     cors: { origin: '*' },
     methods: ["GET","POST"],
     transport: ['websocket','polling'],
-    path: '/alertSocket',
+    path: '/websocket',
     credentials: true,
   })
   export class AlertGateway
