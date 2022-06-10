@@ -4,7 +4,7 @@ import { ConnectedSocket, MessageBody, OnGatewayConnection, OnGatewayDisconnect,
 import { Server, Socket } from 'socket.io';
 import { User } from 'src/index.entities';
 import { UserService } from 'src/newSummary/user/user.service';
-import { getRepository, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 
 
   @WebSocketGateway(8002, {
@@ -47,8 +47,10 @@ import { getRepository, Repository } from 'typeorm';
       @MessageBody() data: any
     ){
       if(data){
-        await this.userService.checkUser(data, client.id)
+        const response =  await this.userService.checkUser(data, client.id)
         
+        // if(response) this.server.to(client.id)
+
       }
     }
    

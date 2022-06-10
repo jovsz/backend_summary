@@ -16,6 +16,7 @@ export class UserService {
 
     async checkUser(full: string, socket:string){
         let user = new CreateUserDto()
+        let hasConnected = false
         
         const name = full.split(' ');
         const verify = await this.userRepository.findOne({ where: { fullName: full }})
@@ -32,15 +33,15 @@ export class UserService {
             if(!save) throw new NotFoundException('Error saving user')
             await this.userRepository.update(save.id, {status: `${status.ONLINE}`})
 
-            return true
+            hasConnected = true
         }
        
-        verify.sockets.push(socket)
-       
+            verify.sockets.push(socket)
+            hasConnected = true
         await this.userRepository.update(verify.id, {status: `${status.ONLINE}`})
         await this.userRepository.save(verify)
         
-        return true
+        return hasConnected
     }
 
     async onDisconnect(socket:string){
@@ -56,6 +57,7 @@ export class UserService {
         if(data){
             const allSockets = data.sockets.filter(e => e !== socket)
             await this.userRepository.update(data.id, {sockets: allSockets})
+            await this.userRepository.update(data.id, {status: `${status.OFFLINE}`})
         }
     }
 }
