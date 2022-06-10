@@ -26,8 +26,8 @@ export class User extends BaseEntity {
   })
   status?: string;
 
-  @Column('simple-array', { nullable: true, default: [] })
-    sockets: string[];
+  @Column("text", { array: true, default: "{}"})
+  sockets: string[];
 
   @CreateDateColumn({ type: 'timestamp'})
   createdAt: Date;

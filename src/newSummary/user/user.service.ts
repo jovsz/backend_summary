@@ -44,15 +44,18 @@ export class UserService {
     }
 
     async onDisconnect(socket:string){
-        const data = await this.userRepository.createQueryBuilder('user')
+        const data = await this.userRepository
+        .createQueryBuilder("user")
         .select()
-        .where('user.sockets ::jsonb @> :sockets', {
-          sockets: JSON.stringify([socket])
-        })
-        .printSql()
-        .getMany();
+        .where("user.sockets && ARRAY[:...tags]", {tags: [socket]})
+        .getOne();
         
         console.log(socket)
         console.log(data)
+
+        if(data){
+            const allSockets = data.sockets.filter(e => e !== socket)
+            await this.userRepository.update(data.id, {sockets: allSockets})
+        }
     }
 }
