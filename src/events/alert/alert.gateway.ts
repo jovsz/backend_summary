@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ConnectedSocket, MessageBody, OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit, SubscribeMessage, WebSocketGateway, WebSocketServer, } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { User } from 'src/index.entities';
+import { CheckUserDto } from './dto/checkUserDto';
 import { UserService } from 'src/newSummary/user/user.service';
 import { Repository } from 'typeorm';
 
@@ -44,8 +45,9 @@ import { Repository } from 'typeorm';
     @SubscribeMessage('checkUser')
     async check(
       @ConnectedSocket() client: Socket,
-      @MessageBody() data: any
+      @MessageBody() data: CheckUserDto
     ){
+      console.log(data)
       if(data){
         const response =  await this.userService.checkUser(data, client.id)
         

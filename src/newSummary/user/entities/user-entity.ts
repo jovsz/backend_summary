@@ -16,6 +16,9 @@ export class User extends BaseEntity {
   @Column()
   fullName: string;
 
+  @Column({type: 'varchar', unique:true})
+  email: string;
+
   @Column({ default: true })
   active: boolean;
 

@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user-entity'
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto';
+import { CheckUserDto } from 'src/events/alert/dto/checkUserDto';
 import { status } from './enum/status-enum';
 
 @Injectable()
@@ -14,18 +15,20 @@ export class UserService {
 
 
 
-    async checkUser(full: string, socket:string){
+    async checkUser(data: CheckUserDto , socket:string){
         let user = new CreateUserDto()
         let hasConnected = false
+        console.log(data, socket)
         
-        const name = full.split(' ');
-        const verify = await this.userRepository.findOne({ where: { fullName: full }})
+        const name = data.full.split(' ');
+        const verify = await this.userRepository.findOne({ where: { email: data.email }})
         
         if(!verify){
             user.sockets = []
             user.firstName = name[0]
             user.lastName = name[1]
-            user.fullName = full
+            user.email = data.email
+            user.fullName = data.full
             user.sockets.push(socket)
             
             const save = await this.userRepository.save(user)
@@ -50,9 +53,6 @@ export class UserService {
         .select()
         .where("user.sockets && ARRAY[:...tags]", {tags: [socket]})
         .getOne();
-        
-        console.log(socket)
-        console.log(data)
 
         if(data){
             const allSockets = data.sockets.filter(e => e !== socket)
