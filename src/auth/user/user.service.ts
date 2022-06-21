@@ -40,8 +40,12 @@ export class UserService {
 
             if(!save) throw new NotFoundException('Error saving user')
             await this.userRepository.update(save.id, {status: `${status.ONLINE}`})
-
+            const token = await this.authSerive.generateJwtToken(save.id)
+            save.jwt_token = token.token
+            save.secure = token.secret
+            await this.userRepository.save(save)
             hasConnected = true
+            return token.token
         }
             const token = await this.authSerive.generateJwtToken(verify.id)
             verify.sockets.push(socket)
