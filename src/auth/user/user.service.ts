@@ -5,18 +5,23 @@ import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto';
 import { CheckUserDto } from 'src/events/alert/dto/checkUserDto';
 import { status } from './enum/status-enum';
+import { JwtService } from '@nestjs/jwt';
+import { AuthService } from '../auth.service';
 
 @Injectable()
 export class UserService {
 
     constructor(
         @InjectRepository(User) private readonly userRepository: Repository<User>,
+        private authSerive: AuthService,
+     
     ){}
 
 
 
     async checkUser(data: CheckUserDto , socket:string){
         let user = new CreateUserDto()
+  
         let hasConnected = false
         console.log(data, socket)
         
@@ -38,13 +43,17 @@ export class UserService {
 
             hasConnected = true
         }
-       
+            const token = await this.authSerive.generateJwtToken(verify.id)
             verify.sockets.push(socket)
+            verify.jwt_token = token.token
+            verify.secure = token.secret
             hasConnected = true
         await this.userRepository.update(verify.id, {status: `${status.ONLINE}`})
         await this.userRepository.save(verify)
+
         
-        return hasConnected
+        
+        return token.token
     }
 
     async onDisconnect(socket:string){
@@ -53,6 +62,8 @@ export class UserService {
         .select()
         .where("user.sockets && ARRAY[:...tags]", {tags: [socket]})
         .getOne();
+
+        console.log(data)
 
         if(data){
             const allSockets = data.sockets.filter(e => e !== socket)

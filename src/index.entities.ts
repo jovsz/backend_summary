@@ -1,1 +1,1 @@
-export * from './newSummary/user/entities/user-entity'
+export * from './auth/user/entities/user-entity'

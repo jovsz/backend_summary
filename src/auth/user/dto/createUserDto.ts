@@ -1,4 +1,4 @@
-import { IsString, IsInt, IsOptional, IsUUID, IsNotEmpty, IsEmail } from 'class-validator';
+import { IsString, IsInt, IsOptional, IsUUID, IsNotEmpty, IsEmail, IsJWT } from 'class-validator';
 
 export class CreateUserDto {
 
@@ -25,4 +25,12 @@ export class CreateUserDto {
 
     @IsOptional()
     sockets: string[];
+
+    @IsOptional()
+    @IsJWT()
+    jwt_token: string;
+
+    @IsOptional()
+    @IsString()
+    secure: string;
 }

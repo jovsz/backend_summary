@@ -5,8 +5,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { AlertGateway } from './events/alert/alert.gateway';
+import { AuthModule } from './auth/auth.module'
 import { AlertModule } from './events/alert/alert.module';
-import { UserModule } from './newSummary/user/user.module';
+import { UserModule } from './auth/user/user.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { UserModule } from './newSummary/user/user.module';
     EventEmitterModule.forRoot(),
     AlertModule,
     UserModule,
+    AuthModule
   ],
   controllers: [AppController],
   providers: [AppService],

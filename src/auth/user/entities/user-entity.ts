@@ -29,6 +29,18 @@ export class User extends BaseEntity {
   })
   status?: string;
 
+  @Column({
+    type: 'varchar',
+    nullable:true
+  })
+  jwt_token: string
+
+  @Column({
+    type: 'varchar',
+    nullable:true,
+  })
+  secure: string;
+
   @Column("text", { array: true, default: "{}"})
   sockets: string[];
 

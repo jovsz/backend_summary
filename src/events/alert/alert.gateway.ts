@@ -4,7 +4,7 @@ import { ConnectedSocket, MessageBody, OnGatewayConnection, OnGatewayDisconnect,
 import { Server, Socket } from 'socket.io';
 import { User } from 'src/index.entities';
 import { CheckUserDto } from './dto/checkUserDto';
-import { UserService } from 'src/newSummary/user/user.service';
+import { UserService } from 'src/auth/user/user.service';
 import { Repository } from 'typeorm';
 
 
@@ -47,11 +47,11 @@ import { Repository } from 'typeorm';
       @ConnectedSocket() client: Socket,
       @MessageBody() data: CheckUserDto
     ){
-      console.log(data)
+      
       if(data){
         const response =  await this.userService.checkUser(data, client.id)
-        
-        // if(response) this.server.to(client.id)
+        console.log('response', response)
+        if(response) this.server.to(client.id).emit('checkResponse',response)
 
       }
     }
