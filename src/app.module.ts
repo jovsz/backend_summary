@@ -8,6 +8,7 @@ import { AlertGateway } from './events/alert/alert.gateway';
 import { AuthModule } from './auth/auth.module'
 import { AlertModule } from './events/alert/alert.module';
 import { UserModule } from './auth/user/user.module';
+import { NotificationModule } from './newSummary/notification/notification.module';
 
 @Module({
   imports: [
@@ -28,7 +29,8 @@ import { UserModule } from './auth/user/user.module';
     EventEmitterModule.forRoot(),
     AlertModule,
     UserModule,
-    AuthModule
+    AuthModule,
+    NotificationModule
   ],
   controllers: [AppController],
   providers: [AppService],

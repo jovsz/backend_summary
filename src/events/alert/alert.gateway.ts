@@ -5,7 +5,9 @@ import { Server, Socket } from 'socket.io';
 import { User } from 'src/index.entities';
 import { CheckUserDto } from './dto/checkUserDto';
 import { UserService } from 'src/auth/user/user.service';
+import { NotificationService } from 'src/newSummary/notification/notification.service';
 import { Repository } from 'typeorm';
+import { randomUUID } from 'crypto'
 
 
   @WebSocketGateway(8002, {
@@ -24,6 +26,7 @@ import { Repository } from 'typeorm';
 
     constructor(
       private readonly userService: UserService,
+      private readonly notificationService: NotificationService, 
       
     ) {
 
@@ -50,19 +53,41 @@ import { Repository } from 'typeorm';
       
       if(data){
         const response =  await this.userService.checkUser(data, client.id)
-        console.log('response', response)
+        
         if(response) this.server.to(client.id).emit('checkResponse',response)
 
       }
+    }
+
+    @SubscribeMessage('updateDashboard')
+    async updateDashboardPro(
+      @ConnectedSocket() client: Socket,
+      @MessageBody() data: any,
+    ){
+      this.server.emit('updateDashboardResponse', data)
     }
    
 
     async sendAlert(
         data:any,
     ){
-      
         this.server.emit('newAlert',data)
-        return 'Alerta Enviada'
+    }
+
+    @SubscribeMessage('sendAlert')
+    async sendAlertSocket(
+      @ConnectedSocket() client: Socket,
+      @MessageBody() data:any,
+    ){
+        
+        let save = await this.notificationService.createNewNotification(data, client.id.toString())
+        
+        if(save){
+          //@ts-ignore
+          save.currentTime = data.currentTime
+          await this.server.emit('newAlert',save)
+        }
+        
     }
     
    
