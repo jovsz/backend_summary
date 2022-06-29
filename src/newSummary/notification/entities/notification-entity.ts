@@ -17,6 +17,9 @@ export class Notification extends BaseEntity {
   @JoinTable()
   user_id: User[]
 
+  @Column({type: 'varchar', nullable:true})
+  currentTime: string;
+
   @CreateDateColumn({ type: 'timestamp'})
   createdAt: Date;
 

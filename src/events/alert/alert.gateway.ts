@@ -81,12 +81,10 @@ import { randomUUID } from 'crypto'
     ){ 
         
         let save = await this.notificationService.createNewNotification(data, client.id.toString())
-        
+        console.log(save)
         if(save){
           await client.broadcast.emit('newAlert',save)
         }
         
     }
-    
-   
   }

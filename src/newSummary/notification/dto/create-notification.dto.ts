@@ -10,6 +10,10 @@ export class createNotificationDto {
     @IsString()
     type:string
 
+    @IsString()
+    @IsOptional()
+    currentTime: string
+
     @IsOptional()
     user_id: string;;
 }
