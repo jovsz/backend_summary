@@ -14,10 +14,10 @@ export class NotificationService {
 
     async createNewNotification(data:any, socket: string){
         let obj = new createNotificationDto()
-
-        obj.message = data.action === 'Working' ? `${data.fullName} start ${data.action} on ${data.activity} with ${data.task}` : ''
+        console.log(data)
+        obj.message = data.action === 'Working' ? `${data.fullName} start ${data.action} on ${data.activity} with ${data.task}` : `${data.fullName}, ${data.action} at ${data.currentTime} `
         obj.type = data.type
-
+        
         //@ts-ignore
         const save = await this.notificationRepo.save(obj)
 

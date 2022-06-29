@@ -78,14 +78,12 @@ import { randomUUID } from 'crypto'
     async sendAlertSocket(
       @ConnectedSocket() client: Socket,
       @MessageBody() data:any,
-    ){
+    ){ 
         
         let save = await this.notificationService.createNewNotification(data, client.id.toString())
         
         if(save){
-          //@ts-ignore
-          save.currentTime = data.currentTime
-          await this.server.emit('newAlert',save)
+          await client.broadcast.emit('newAlert',save)
         }
         
     }
