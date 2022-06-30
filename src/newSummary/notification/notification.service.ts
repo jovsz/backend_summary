@@ -17,6 +17,7 @@ export class NotificationService {
         obj.message = data.action === 'Working' ? `${data.fullName} start ${data.action} on ${data.activity} with ${data.task}` : `${data.fullName}, ${data.action}`
         obj.type = data.type
         obj.currentTime = data.currentTime
+        obj.relatedArea = data.relatedArea
         //@ts-ignore
         const save = await this.notificationRepo.save(obj)
 

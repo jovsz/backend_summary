@@ -13,6 +13,9 @@ export class Notification extends BaseEntity {
   @Column({type: 'varchar'})
   type: string
 
+  @Column({type: 'varchar'})
+  relatedArea: string
+
   @ManyToMany(() => User)
   @JoinTable()
   user_id: User[]

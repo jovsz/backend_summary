@@ -14,6 +14,9 @@ export class createNotificationDto {
     @IsOptional()
     currentTime: string
 
+    @IsString()
+    relatedArea: string
+
     @IsOptional()
     user_id: string;;
 }
